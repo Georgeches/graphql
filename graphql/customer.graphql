@@ -1,0 +1,41 @@
+type Query {
+    customers: [Customer!]! @all
+    customer(id: ID, email: String): Customer @find
+}
+
+type Mutation {
+    createCustomer(input: CreateCustomerInput! @spread): Customer @create
+    updateCustomer(input: UpdateCustomerInput! @spread): Customer @field(resolver: "CustomerResolver@update")
+}
+
+type Customer {
+    id: ID!
+    firstname: String!
+    secondname: String!
+    email: String!
+    phone: String!
+    address: String!
+    city: String!
+    orders: [Order!]! @hasMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateCustomerInput {
+    firstname: String!
+    secondname: String!
+    email: String!
+    phone: String!
+    address: String!
+    city: String!
+}
+
+input UpdateCustomerInput {
+    id: ID!
+    firstname: String
+    secondname: String
+    email: String
+    phone: String
+    address: String
+    city: String
+}

@@ -1,0 +1,39 @@
+extend type Query {
+    users(page: Int = 1, count: Int = 20): [User!] @field(resolver: "UserResolver@paginate")
+    
+    user(
+        id: ID
+        email: String
+    ): User @field(resolver: "UserResolver@show")
+}
+
+extend type Mutation {
+    createUser(input: CreateUserInput! @spread): User @field(resolver: "UserResolver@new")
+    updateUser(input: UpdateUserInput! @spread): User @field(resolver: "UserResolver@update")
+    deleteUser(id: String!): Message @field(resolver: "UserResolver@delete")
+}
+
+type User {
+    id: ID
+    name: String
+    email: String
+    password: String
+}
+
+type Message {
+    status: String!
+    message: String!
+}
+
+input CreateUserInput{
+    name: String!
+    email: String!
+    password: String!
+}
+
+input UpdateUserInput{
+    id: ID!
+    name: String
+    email: String
+    password: String
+}
