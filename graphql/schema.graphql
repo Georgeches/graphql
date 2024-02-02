@@ -5,4 +5,10 @@ type Query
 
 type Mutation
 
+type Message {
+    status: String!
+    message: String!
+}
+
 #import user.graphql
+#import customer.graphql

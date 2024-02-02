@@ -2,13 +2,34 @@
 
 namespace App\GraphQL\Queries;
 
-final readonly class productResolver
+use App\Models\Customer;
+
+final readonly class CustomerResolver
 {
     /** @param  array{}  $args */
-    public function update($_, array $args)
+    public function paginate($_, array $args)
     {
-        $customer = Customer::find($args['id']);
-        $customer->update($args);
-        return $customer;
+        $page = $args['page'];
+        $count = $args['count'];
+        $customers = Customer::query()
+            ->orderBy('id', 'asc')
+            ->paginate($count, ['*'], 'page', $page);
+        
+        return $customers;
+    }
+
+    public function show($_, array $args)
+    {
+        if(isset($args['id'])){
+            $customer = Customer::find($args['id']);
+            return $customer;
+        }
+
+        $customers = Customer::all();
+        foreach($customers as $customer){
+            if($customer->email === $args['email']){
+                return $customer;
+            }
+        }
     }
 }

@@ -1,24 +1,25 @@
 type Query {
-    customers: [Customer!]! @all
-    customer(id: ID, email: String): Customer @find
+    customers(page: Int=1 count: Int=20): [Customer!] @field(resolver: "CustomerResolver@paginate")
+    customer(id: ID, email: String): Customer @field(resolver: "CustomerResolver@show")
 }
 
 type Mutation {
-    createCustomer(input: CreateCustomerInput! @spread): Customer @create
+    createCustomer(input: CreateCustomerInput! @spread): Customer @field(resolver: "CustomerResolver@new")
     updateCustomer(input: UpdateCustomerInput! @spread): Customer @field(resolver: "CustomerResolver@update")
+    deleteCustomer(id: ID!): Message @field(resolver: "CustomerResolver@delete")
 }
 
 type Customer {
     id: ID!
-    firstname: String!
-    secondname: String!
-    email: String!
-    phone: String!
-    address: String!
-    city: String!
-    orders: [Order!]! @hasMany
-    created_at: DateTime!
-    updated_at: DateTime!
+    firstname: String
+    secondname: String
+    email: String
+    phone: String
+    address: String
+    city: String
+    # orders: [Order!] @hasMany
+    created_at: DateTime
+    updated_at: DateTime
 }
 
 input CreateCustomerInput {

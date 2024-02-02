@@ -20,8 +20,17 @@ final readonly class UserResolver
 
     public function show($_, array $args)
     {
-        $user = User::findOrFail($args['id']);
+        if(isset($args['id'])){
+            $user = User::find($args['id']);
 
-        return $user;
+            return $user;
+        }
+
+        $users = User::all();
+        foreach($users as $user){
+            if($user->email === $args['email']){
+                return $user;
+            }
+        }
     }
 }
